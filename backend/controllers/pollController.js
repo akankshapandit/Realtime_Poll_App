@@ -6,22 +6,35 @@ exports.createPoll = async (req, res) => {
   try {
     const { question, options } = req.body;
 
-    if (!question || options.length < 2) {
+    if (!question || !options || options.length < 2) {
       return res.status(400).json({ msg: "Invalid input" });
     }
 
     const poll = new Poll({
       question,
-      options: options.map((o) => ({ text: o })),
+      options: options.map((o) => ({
+        text: o,
+        votes: 0, // important
+      })),
     });
 
     await poll.save();
 
-    res.json(poll);
-  } catch (err) {
-    res.status(500).json({ msg: "Server error" });
-  }
-};
+    res.status(201).json({
+      id: poll._id,
+    });
+
+} catch (err) {
+  console.log("FULL ERROR:", err); // 👈 ADD THIS
+  res.status(500).json({
+    msg: "Server error",
+    error: err.message,
+  });
+}
+}
+
+
+
 
 // Get Poll
 exports.getPoll = async (req, res) => {

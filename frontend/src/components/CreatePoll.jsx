@@ -11,29 +11,36 @@ function CreatePoll() {
     setOptions([...options, ""]);
   };
 
-  const createPoll = async () => {
-    if (!question.trim()) {
-      alert("Enter question");
-      return;
-    }
+const createPoll = async () => {
+  if (!question.trim()) {
+    alert("Enter question");
+    return;
+  }
 
-    if (options.some((o) => !o.trim())) {
-      alert("Fill all options");
-      return;
-    }
+  if (options.some((o) => !o.trim())) {
+    alert("Fill all options");
+    return;
+  }
 
-    try {
-      const res = await api.post("/poll/create", {
-        question,
-        options,
-      });
+  try {
+   const res = await api.post("/poll/create", {
+      question,
+      options,
+    });
 
-      setLink(`${window.location.origin}/poll/${res.data._id}`);
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
-  };
+    const id = res.data.id;
+
+    // ✅ Build link properly
+    setLink(`${window.location.origin}/poll/${id}`);
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+};
+
+
+
 
   return (
     <div className="flex justify-center mt-10">

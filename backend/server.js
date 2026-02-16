@@ -24,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/poll", pollRoutes);
+app.use("/api/poll", pollRoutes); 
+
 
 // Socket
 socketHandler(io);
